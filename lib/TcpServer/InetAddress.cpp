@@ -1,0 +1,41 @@
+#include"InetAddress.h"
+InetAddress::InetAddress(uint16_t port)
+{
+	::memset(&addr_, 0, sizeof(addr_));
+	addr_.sin_family = AF_INET;
+	addr_.sin_addr.s_addr = INADDR_ANY;
+	addr_.sin_port = ::htons(port);
+}
+
+InetAddress::InetAddress(const struct sockaddr_in &addr)
+	:addr_(addr)
+{
+}
+
+std::string InetAddress::toIp()const
+{
+	return std::string(inet_ntoa(addr_.sin_addr));
+}
+
+uint16_t InetAddress::toPort()const
+{
+	return ntohs(addr_.sin_port);
+}
+
+InetAddress InetAddress::getLocalAddress(int sockfd)
+{
+	struct sockaddr_in addr;
+	socklen_t len = sizeof(addr);
+	if(::getsockname(sockfd,(SA *)&addr,&len) == -1)
+		perror("getsockname");
+	return InetAddress(addr);
+}
+
+InetAddress InetAddress::getPeerAddress(int sockfd)
+{
+	struct sockaddr_in addr;
+	socklen_t len =sizeof(addr);
+	if(::getpeername(sockfd, (SA*)&addr, &len) == -1)
+		perror("getpeername");
+	return InetAddress(addr);
+}

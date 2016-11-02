@@ -1,0 +1,5 @@
+CACHE_A=/home/xujie/0815/SmartCorrect/cache/cache_a.txt
+CACHE_B=/home/xujie/0815/SmartCorrect/cache/cache_b.txt
+DATA=/home/xujie/0815/SmartCorrect/data
+PORT=8888
+
